@@ -1,0 +1,13 @@
+version: "3"
+
+tasks:
+  sqitch:
+    requires:
+      vars:
+        - DATABASE_USER
+        - DATABASE_PASSWORD
+        - DATABASE_NAME
+    cmds:
+      - ./sqitch {{.CLI_ARGS}}
+    env:
+      SQITCH_TARGET: db:pg://{{.DATABASE_USER}}:{{.DATABASE_PASSWORD}}@database:5432/{{.DATABASE_NAME}}

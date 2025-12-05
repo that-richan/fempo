@@ -1,0 +1,86 @@
+version: "3"
+
+set:
+  - errexit
+  - pipefail
+  - nounset
+shopt:
+  - globstar
+
+includes:
+  app:
+    dir: ./app
+    taskfile: ./app/task.yaml
+  database:
+    dir: ./database
+    taskfile: ./database/task.yaml
+  server:
+    dir: ./server
+    taskfile: ./server/task.yaml
+
+env:
+  VERSION:
+    sh: if test -n "${VERSION}"; then echo "${VERSION}"; else git describe --dirty; fi
+  COMPOSE_BAKE: true
+
+tasks:
+  install:
+    cmds:
+      - deno install --allow-scripts=npm:protobufjs@7.5.4,npm:tailwindcss@4.1.17
+      - task: server:install
+
+  update:
+    cmds:
+      - deno update --latest -r
+      - task: server:update
+
+  check:
+    cmds:
+      - deno fmt --check
+      - deno check
+      - deno lint
+      - task: server:check
+
+  fmt:
+    cmds:
+      - deno fmt
+      - task: server:fmt
+
+  generate:
+    cmds:
+      - task: app:generate
+      - protoc --go_out=. core/protobufs/*.proto
+
+  dev:*:
+    vars:
+      ENV: "{{index .MATCH 0}}"
+    dotenv:
+      - .env
+      - "{{.ENV}}.env"
+      - "{{.ENV}}.secrets"
+      - global.env
+    cmds:
+      - docker compose -f compose-core.yaml -f compose-dev.yaml up --watch --build
+
+  preview:*:
+    vars:
+      ENV: "{{index .MATCH 0}}"
+    dotenv:
+      - .env
+      - "{{.ENV}}.env"
+      - "{{.ENV}}.secrets"
+      - global.env
+    cmds:
+      - docker compose -f compose-core.yaml -f compose.yaml up --build
+
+  build:*:
+    vars:
+      ENV: "{{index .MATCH 0}}"
+    dotenv:
+      - .env
+      - "{{.ENV}}.env"
+      - "{{.ENV}}.secrets"
+      - global.env
+    cmds:
+      - docker compose -f compose-core.yaml -f compose.yaml build
+      - docker save -o {{.PROJECT}}.tar {{.PROJECT}}-database {{.PROJECT}}-sqitch-migrator {{.PROJECT}}-server {{.PROJECT}}-app

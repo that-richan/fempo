@@ -1,0 +1,5 @@
+/*.env
+/.vite
+/node_modules
+/vite.config.*.timestamp-*.*
+/.router

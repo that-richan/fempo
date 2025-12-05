@@ -1,0 +1,4 @@
+%syntax-version=1.0.0
+%project=fempo
+
+appschema 2025-12-05T21:10:39Z Richard Jelínek <richard.jelinek@proton.me> # Add schema for all fempo objects.

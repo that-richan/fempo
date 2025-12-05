@@ -1,0 +1,68 @@
+services:
+  dev-server:
+    depends_on:
+      database:
+        condition: service_healthy
+      sqitch-migrator:
+        condition: service_completed_successfully
+    # TODO Enable when server listens to HTTP requests
+    #healthcheck:
+    #    test: ["CMD-SHELL", "nc -z localhost:3333 || exit 1"]
+    #    interval: 2s
+    #    timeout: 30s
+    #    retries: 30
+    restart: unless-stopped
+    build:
+      context: ./server/
+      dockerfile: Dockerfile.dev
+      pull: true
+    develop:
+      watch:
+        - action: sync
+          path: ./server/
+          target: /source
+    ports:
+      - "${SERVER_PORT}:3333"
+    env_file:
+      - .env
+      - ${ENV}.env
+      - ${ENV}.secrets
+      - global.env
+    environment:
+      DATABASE_URL: postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@database:5432/${DATABASE_NAME}
+      VERSION: ${VERSION}
+
+  dev-app:
+    # TODO Enable when server listens to HTTP requests
+    #depends_on:
+    #  dev-server:
+    #    condition: service_healthy
+    restart: unless-stopped
+    build:
+      context: ./
+      dockerfile: ./app/Dockerfile.dev
+      pull: true
+    develop:
+      watch:
+        - action: sync
+          path: ./app/
+          target: /source/app
+          ignore:
+            - src/generated
+            - src/.router
+    volumes:
+      - type: bind
+        source: ./app/src/generated
+        target: /source/app/src/generated
+      - type: bind
+        source: ./app/.router
+        target: /source/app/.router
+    ports:
+      - "${APP_PORT}:4444"
+    env_file:
+      - .env
+      - ${ENV}.env
+      - ${ENV}.secrets
+      - global.env
+    environment:
+      VERSION: ${VERSION}

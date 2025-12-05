@@ -1,0 +1,7 @@
+version: "3"
+
+tasks:
+  generate:
+    desc: Generate router and icon types
+    cmds:
+      - npx sv-router

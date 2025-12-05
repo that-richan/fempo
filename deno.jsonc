@@ -1,0 +1,54 @@
+{
+	"workspace": [
+		"./app"
+	],
+	"unstable": [
+		"temporal",
+		"fmt-component",
+		"fmt-sql"
+	],
+	"nodeModulesDir": "auto",
+	"fmt": {
+		"semiColons": true,
+		"singleQuote": false,
+		"useTabs": true,
+		"indentWidth": 4,
+		"lineWidth": 120,
+		"newLineKind": "lf",
+		"spaceAround": false,
+		"spaceSurroundingProperties": true,
+		"include": [
+			".zed/*.json",
+			"**/*.css",
+			"**/*.html",
+			"**/*.js",
+			"**/*.json",
+			"**/*.jsonc",
+			"**/*.md",
+			"**/*.svelte",
+			"**/*.ts"
+		],
+		"exclude": [
+			"**/*.yaml"
+		]
+	},
+	"minimumDependencyAge": {
+		"age": "P7D"
+	},
+	"lint": {
+		"include": [
+			"**/*.ts",
+			"**/*.svelte",
+			"**/*.css",
+			"**/*.html"
+		],
+		"rules": {
+			"tags": [
+				"recommended"
+			],
+			"exclude": [
+				"no-unversioned-import"
+			]
+		}
+	}
+}

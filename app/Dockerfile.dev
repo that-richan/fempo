@@ -1,0 +1,16 @@
+FROM denoland/deno:alpine-2.5.6
+
+RUN mkdir /source
+RUN chown -R deno:deno /source
+WORKDIR /source
+
+USER deno
+
+RUN mkdir ./app
+COPY ./deno.jsonc ./deno.lock ./
+COPY ./app/deno.jsonc ./app/
+RUN deno install
+
+COPY --chown=deno:deno ./app/ ./app/
+
+CMD ["deno", "task", "-r", "dev"]

@@ -1,0 +1,4 @@
+FROM sqitch/sqitch:v1.6.0
+WORKDIR /sqitch
+COPY . .
+CMD ["deploy", "--verify"]
