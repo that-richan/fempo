@@ -1,0 +1,22 @@
+{
+	"compilerOptions": {
+		"verbatimModuleSyntax": true,
+		"module": "esnext",
+		"moduleResolution": "bundler",
+		"types": [
+			"svelte",
+			"vite/client"
+		],
+		"lib": [
+			"esnext",
+			"dom",
+			"dom.iterable",
+			"dom.asynciterable",
+			"deno.ns"
+		]
+	},
+	"include": [
+		"src/**/*.ts",
+		"src/**/*.svelte"
+	]
+}
