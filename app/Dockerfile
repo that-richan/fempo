@@ -1,4 +1,4 @@
-FROM denoland/deno:alpine-2.5.6 AS build
+FROM denoland/deno:alpine-2.6.0 AS build
 
 RUN mkdir /source
 RUN chown -R deno:deno /source

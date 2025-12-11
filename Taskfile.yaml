@@ -26,16 +26,17 @@ env:
 tasks:
   install:
     cmds:
-      - deno install --allow-scripts=npm:protobufjs@7.5.4,npm:tailwindcss@4.1.17
+      - deno install
       - task: server:install
 
   update:
     cmds:
-      - deno update --latest -r
+      - deno outdated --update --recursive
       - task: server:update
 
   check:
     cmds:
+      - deno audit --socket
       - deno fmt --check
       - deno check
       - deno lint

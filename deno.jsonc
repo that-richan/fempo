@@ -7,6 +7,10 @@
 		"fmt-component",
 		"fmt-sql"
 	],
+	"allowScripts": [
+		"npm:esbuild@0.25.12",
+		"npm:protobufjs@7.5.4"
+	],
 	"nodeModulesDir": "auto",
 	"fmt": {
 		"semiColons": true,
