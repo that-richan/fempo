@@ -2,6 +2,6 @@
 
 BEGIN;
 
-DROP SCHEMA organite;
+DROP SCHEMA fempo;
 
 COMMIT;
